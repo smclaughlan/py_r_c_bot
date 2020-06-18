@@ -1,16 +1,20 @@
 import urllib.request
-import xml.etree.ElementTree as ET
+import json
 
-def printweather():
-  # todo: get proper url for this user
-  site = urllib.request.urlopen("https://forecast.weather.gov/MapClick.php?lat=40.1051&lon=-75.1502&unit=0&lg=english&FcstType=dwml")
-  str = site.read()
-  xml_root = ET.fromstring(str)
+# TODO make an object mapping cities to their lat and lon so that city names can be typed in instead
+# locationDict = { "LA": { "lat": 0, "lon": 0}}
 
-  weather_location = xml_root.find("./head/source/production-center")
-  fahrenheit = xml_root.find("./data[@type='current observations']/parameters/temperature[@units='Fahrenheit']/value")
-  conditions = xml_root.find("./data[@type='current observations']/parameters/weather/weather-conditions[@weather-summary]")
-  return ("Current weather in " + weather_location.text + ": " + fahrenheit.text + "F, " + conditions.attrib['weather-summary'])
 
-#test
-#printweather()
+def printweather(lat, lon):
+  # ...with TODO above. if lat in locationDict.keys(): locationDict[lat] etc...
+  # rename lat to latOrCity?
+    try:
+        data = urllib.request.urlopen(
+            f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=hourly,daily,minutely&units=imperial&appid=4ba6a408966bcec7ac3ae7026c9ab365")
+        wData = json.loads(data.read())
+        # print(readableData) #prints very poorly
+        # below is human readable
+        # print(json.dumps(wData, indent=4, sort_keys=True))
+        return f"{wData['current']['temp']} fahrenheit. {wData['current']['humidity']}% humidity. Feels like {wData['current']['feels_like']} fahrenheit. Generally: {wData['current']['weather'][0]['description']}."
+    except:
+        return "Something went wrong."
