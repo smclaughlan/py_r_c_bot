@@ -13,8 +13,8 @@ from getcovid import getCovidData
 
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server = "chat.freenode.net"
-channel = "#bot-testing"
-# channel = '#sketchdaily'
+# channel = "#bot-testing"
+channel = '#sketchdaily'
 botnick = "tinjbot"  # The bot's nickname
 adminname = "ThereIsNoJustice"  # My IRC nickname - change this to your username
 exitcode = "bye " + botnick
@@ -96,15 +96,21 @@ def main():
                     sendmsg("!lol dodongo")
 
                 if message.find(".choose") != -1:
+                    # get rid of the .choose first
                     msgArrSplit = message.split(' ')
-                    if len(msgArrSplit) == 2:
-                        msgArrSplit.pop(0)
+                    msgArrSplit.pop(0)
+                    # then rejoin w/o
+                    msgArrJoined = ' '.join(msgArrSplit)
+                    # split on commas, so if there's only one choice given
+                    #len == 1
+                    msgArrCommaSplit = msgArrJoined.split(', ')
+                    print(msgArrSplit)
+                    if len(msgArrCommaSplit) == 1:
                         yesNos = ["yeah do it", "well maybe",
                                   "no i don't think so", "it's probably fine"]
                         sendmsg(random.choice(yesNos))
-                    elif len(msgArrSplit) > 2:
-                        msgArrSplit.pop(0)
-                        chosen = random.choice(msgArrSplit)
+                    elif len(msgArrCommaSplit) > 1:
+                        chosen = random.choice(msgArrCommaSplit)
                         preMsg = random.choice(
                             ["i like this one", "sounds cool", "the best", "be a good human", "embrace obedience to your robot masters"])
                         sendmsg(f"{preMsg}: {chosen}")
