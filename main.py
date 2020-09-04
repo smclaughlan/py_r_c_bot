@@ -9,13 +9,14 @@ import getdate
 import getfortune
 import getskdtheme
 import random
+import time
 from getcovid import getCovidData
 
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server = "chat.freenode.net"
-# channel = "#bot-testing"
-channel = '#sketchdaily'
-botnick = "tinjbot"  # The bot's nickname
+channel = "#bot-testing"
+# channel = '#sketchdaily'
+botnick = "nizz"  # The bot's nickname
 adminname = "ThereIsNoJustice"  # My IRC nickname - change this to your username
 exitcode = "bye " + botnick
 
@@ -40,7 +41,7 @@ def sendmsg(msg, target=channel):  # sends messages to the target
 
 
 def main():
-    getfortune.loadfortunes()
+    # getfortune.loadfortunes()
 
     print(" > > > Beginning IRC bot")
     # connect to the server using the port 6667 (the standard IRC port)
@@ -95,14 +96,10 @@ def main():
                 if message.find(".dodongo") != -1:
                     sendmsg("!lol dodongo")
 
-                if message.find(".choose") != -1:
-                    # get rid of the .choose first
+                if message.find(".choose") == 0:
                     msgArrSplit = message.split(' ')
                     msgArrSplit.pop(0)
-                    # then rejoin w/o
                     msgArrJoined = ' '.join(msgArrSplit)
-                    # split on commas, so if there's only one choice given
-                    #len == 1
                     msgArrCommaSplit = msgArrJoined.split(', ')
                     print(msgArrSplit)
                     if len(msgArrCommaSplit) == 1:
@@ -110,16 +107,19 @@ def main():
                                   "no i don't think so", "it's probably fine"]
                         sendmsg(random.choice(yesNos))
                     elif len(msgArrCommaSplit) > 1:
+                        print(msgArrCommaSplit)
                         chosen = random.choice(msgArrCommaSplit)
                         preMsg = random.choice(
                             ["i like this one", "sounds cool", "the best", "be a good human", "embrace obedience to your robot masters"])
-                        sendmsg(f"{preMsg}: {chosen}")
+                        messageToSend = f"{preMsg}: {chosen}"
+                        print(messageToSend)
+                        sendmsg(messageToSend)
                     else:
                         sendmsg("you need to give me choices!!")
 
-                if message.find(".fortune") != -1:
-                    print("printing fortune")
-                    sendmsg(getfortune.printrandomfortune())
+                # if message.find(".fortune") != -1:
+                #     print("printing fortune")
+                #     sendmsg(getfortune.printrandomfortune())
 
                 if message.find('.getskdtheme') != -1:
                     print('printing skd theme')
