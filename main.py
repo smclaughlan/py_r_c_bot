@@ -8,12 +8,13 @@ import getweather
 import getdate
 import getfortune
 import getskdtheme
+import random
 from getcovid import getCovidData
 
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server = "chat.freenode.net"
-# channel = "#bot-testing"
-channel = '#sketchdaily'
+channel = "#bot-testing"
+# channel = '#sketchdaily'
 botnick = "tinjbot"  # The bot's nickname
 adminname = "ThereIsNoJustice"  # My IRC nickname - change this to your username
 exitcode = "bye " + botnick
@@ -93,6 +94,22 @@ def main():
 
                 if message.find(".dodongo") != -1:
                     sendmsg("!lol dodongo")
+
+                if message.find(".choose") != -1:
+                    msgArrSplit = message.split(' ')
+                    if len(msgArrSplit) == 2:
+                        msgArrSplit.pop(0)
+                        yesNos = ["yeah do it", "well maybe",
+                                  "no i don't think so", "it's probably fine"]
+                        sendmsg(random.choice(yesNos))
+                    elif len(msgArrSplit) > 2:
+                        msgArrSplit.pop(0)
+                        chosen = random.choice(msgArrSplit)
+                        preMsg = random.choice(
+                            ["i like this one", "sounds cool", "the best", "be a good human", "embrace obedience to your robot masters"])
+                        sendmsg(f"{preMsg}: {chosen}")
+                    else:
+                        sendmsg("you need to give me choices!!")
 
                 if message.find(".fortune") != -1:
                     print("printing fortune")
