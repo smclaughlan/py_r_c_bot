@@ -14,8 +14,8 @@ from getcovid import getCovidData
 
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server = "chat.freenode.net"
-channel = "#bot-testing"
-# channel = '#sketchdaily'
+# channel = "#bot-testing"
+channel = '#sketchdaily'
 botnick = "nizz"  # The bot's nickname
 adminname = "ThereIsNoJustice"  # My IRC nickname - change this to your username
 exitcode = "bye " + botnick
@@ -33,7 +33,8 @@ def joinchannel(chan):
 
 
 def ping():  # respond to server Pings
-    ircsock.send(bytes("PONG :pingisn", "UTF-8"))
+    ircsock.send(bytes("PONG :pingisn\n", "UTF-8"))
+    # ircsock.send(bytes("PONG :pingisn", "UTF-8"))
 
 
 def sendmsg(msg, target=channel):  # sends messages to the target
@@ -95,6 +96,24 @@ def main():
 
                 if message.find(".dodongo") != -1:
                     sendmsg("!lol dodongo")
+
+                if message.find(".ftoc") == 0:
+                    try:
+                        f = int(message.split(' ')[1])
+                        c = (f-32)/1.8
+                        c = format(c, ',.2f')
+                        sendmsg(f"{f}f is {c}c")
+                    except:
+                        sendmsg("something went wrong")
+
+                if message.find(".ctof") == 0:
+                    try:
+                        c = int(message.split(' ')[1])
+                        f = (c * 1.8) + 32
+                        f = format(f, ',.2f')
+                        sendmsg(f"{c}c is {f}f")
+                    except:
+                        sendmsg("something went wrong")
 
                 if message.find(".choose") == 0:
                     msgArrSplit = message.split(' ')
